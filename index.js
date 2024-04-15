@@ -32,7 +32,12 @@ io.on("connection", (socket) => {
     const response = "Mittente: " + user + " ha inviato il messaggio il "+ new Date().toString() + "=> " + message;
     io.emit("chat", response); //mando ai client il messaggio dell'utente
   });
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+    io.emit("chat", user + " ha abbandonato la chat"); //mando ai client il messaggio dell'utente
+  });
 });
+
 
 server.listen(conf.port, () => {
   console.log("server running on port: " + conf.port);
