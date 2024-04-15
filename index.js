@@ -1,10 +1,10 @@
-const fs = require('fs');
+const fs = require("fs");
 const express = require("express");
 const http = require("http");
 const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
-const { Server } = require('socket.io');
+const { Server } = require("socket.io");
 const conf = JSON.parse(fs.readFileSync("./conf.json"));
 
 app.use(bodyParser.json());
@@ -18,13 +18,19 @@ const server = http.createServer(app);
 
 const io = new Server(server);
 
-io.on('connection', (socket) => {
-  console.log("socket connected: " + socket.id);
-  io.emit("chat", "new client: " + socket.id);
-  socket.on('message', (message) => {
-    const response = socket.id + ': ' + message;
-    console.log(response);
-    io.emit("chat", response);
+//gestione connessione
+io.on("connection", (socket) => {
+  //gestione login
+  let user;
+  socket.on("login", (username) => {
+    user = username;
+    io.emit("chat", "New user connected: " + username);
+  });
+
+  //gestione messaggio socket
+  socket.on("message", (message) => {
+    const response = user + ": " + message;
+    io.emit("chat", response); //mando ai client il messaggio dell'utente
   });
 });
 
