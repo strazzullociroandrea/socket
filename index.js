@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
 
   //gestione messaggio socket
   socket.on("message", (message) => {
-    const response = user + ": " + message;
+    const response = "Mittente: " + user + " ha inviato il messaggio il "+ new Date().toString() + "=> " + message;
     io.emit("chat", response); //mando ai client il messaggio dell'utente
   });
 });
