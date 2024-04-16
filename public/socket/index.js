@@ -5,7 +5,7 @@ const chat = document.getElementById("chat");
 const user = document.getElementById("user");
 const disconnetti = document.getElementById("disconnetti");
 
-const template = '<li class="list-group-item">%MESSAGE</li>';
+const template = '<li class="list-group-item %textColor">%MESSAGE</li>';
 const messages = [];
 const socket = io();
 const url = new URL(window.location.href);
@@ -15,8 +15,14 @@ const username = url.searchParams.get("username");
 const render = () => {
   let html = "";
   messages.forEach((message) => {
-    const row = template.replace("%MESSAGE", message);
+    let row = template.replace("%MESSAGE", message);
+    if(message.includes(username) && !message.includes("partecipa ora alla chat")){
+      row = row.replace("%textColor","text-primary");
+    }else{
+      row = row.replace("%textColor","text-dark");
+    }
     html += row;
+    
   });
   chat.innerHTML = html;
   window.scrollTo(0, document.body.scrollHeight);

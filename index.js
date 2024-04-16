@@ -24,12 +24,15 @@ io.on("connection", (socket) => {
   let user;
   socket.on("login", (username) => {
     user = username;
-    io.emit("chat", "New user connected: " + username);
+    io.emit("chat", username + " partecipa ora alla chat");
   });
 
   //gestione messaggio socket
   socket.on("message", (message) => {
-    const response = "Mittente: " + user + " ha inviato il messaggio il "+ new Date().toString() + "=> " + message;
+    const date = new Date();
+    const data = date.getDay() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+    const ora = date.getHours() + ":" + date.getMinutes();
+    const response = "Il mittente " + user + ", il "+ data + " alle " + ora + " ha scritto: "+message;
     io.emit("chat", response); //mando ai client il messaggio dell'utente
   });
   socket.on('disconnect', () => {
